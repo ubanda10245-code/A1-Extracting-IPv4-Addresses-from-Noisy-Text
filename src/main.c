@@ -177,7 +177,7 @@ int main(void) {
             printf("Invalid input: no valid IPv4 address found.\n");
         } else {
             // Valid ip, decimal value, with/without port value
-            printf("Extracted IPv4 address: %s (decimal value: %u, port: %d)\n",
+            printf("Extracted IPv4 address: %s (decimal value: %u, port: %u)\n",
                    result.address, result.decimalValue, result.port);
         }
     }
