@@ -18,8 +18,13 @@ int main(void) {
 
     while (1) {
         printf("Enter a string (or 'END' to quit): ");
+        
+        // Read input from the user, and check for EOF/empty input
+        if (fgets(input, sizeof(input), stdin) == NULL) {
+            break;
+        }
 
-        // Strip newline
+        // Strip newline from the input
         size_t len = strlen(input);
         if (len > 0 && input[len - 1] == '\n') {
             input[len - 1] = '\0';
@@ -31,9 +36,9 @@ int main(void) {
             break;
         }
 
-        IPv4Address result;
+        IPv4Address result; // TEMP function call
 
-        // TEMP VALUES
+        // TEMP VALUES set to default
         strcpy(result.address, "-1");
         result.decimalValue = 0;
         result.port = -1;
