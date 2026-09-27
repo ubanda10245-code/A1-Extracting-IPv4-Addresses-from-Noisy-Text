@@ -6,7 +6,7 @@
 typedef struct {
     char address[16];   // "255.255.255.255" + null, or "-1" if invalid address
     unsigned int decimalValue;   // 32-bit decimal value of the address
-    unsigned int port;   // port number, or -1 if port was not given
+    int port;   // port number, or -1 if port was not given
 } IPv4Address;
 
 IPv4Address extractIPv4(const char *input) {
@@ -123,8 +123,12 @@ IPv4Address extractIPv4(const char *input) {
         if (value > 65535) {
             return result;
         }
-
         port = value; // Port value is valid, store its value
+    }
+
+    // CASE: Stray ':' or '.' adjacent to the address (with or without a port)
+    if (input[pos] == '.' || input[pos] == ':') {
+        return result;
     }
  
     // --- Build the final address string and its decimal value ---
@@ -166,7 +170,7 @@ int main(void) {
 
         // Case: `END`, stop the program
         if (strcmp(input, "END") == 0) {
-            printf("Program terminated\n");
+            printf("Program terminated.\n");
             break;
         }
 
@@ -177,10 +181,15 @@ int main(void) {
             printf("Invalid input: no valid IPv4 address found.\n");
         } else {
             // Valid ip, decimal value, with/without port value
-            printf("Extracted IPv4 address: %s (decimal value: %u, port: %u)\n",
-                   result.address, result.decimalValue, result.port);
+            if (result.port == -1) { // without port
+                printf("Extracted IPv4 address: %s (decimal value: %u, port: none)\n",
+                       result.address, result.decimalValue);
+                continue;
+            } else { // with port
+                printf("Extracted IPv4 address: %s (decimal value: %u, port: %d)\n",
+                    result.address, result.decimalValue, result.port);
+            }
         }
     }
-
     return 0;
 }
